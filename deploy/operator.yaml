@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oauth2-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: oauth2-proxy
+  template:
+    metadata:
+      labels:
+        name: oauth2-proxy
+    spec:
+      containers:
+        - name: oauth2-proxy
+          image: paulczar/oauth2-proxy-operator
+          command:
+          - oauth2-proxy
+          imagePullPolicy: Always
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace

@@ -24,7 +24,7 @@ type Handler struct {
 func (h *Handler) Handle(ctx context.Context, event sdk.Event) error {
 	switch o := event.Object.(type) {
 	case *v1alpha1.Proxy:
-		err := sdk.Create(newbusyBoxPod(o))
+		err := sdk.Create(newOauth2Proxy(o))
 		if err != nil && !errors.IsAlreadyExists(err) {
 			logrus.Errorf("Failed to create busybox pod : %v", err)
 			return err
@@ -33,10 +33,22 @@ func (h *Handler) Handle(ctx context.Context, event sdk.Event) error {
 	return nil
 }
 
-// newbusyBoxPod demonstrates how to create a busybox pod
-func newbusyBoxPod(cr *v1alpha1.Proxy) *v1.Pod {
+// todo make this a config map that writes a config file
+var args = []string{
+	"--cookie-secure=false",
+	"--upstream='http://upstream:80'",
+	"--http-address='0.0.0.0:4180'",
+	"--redirect-url='http://example.com/oauth2/callback'",
+	"--email-domain='example.com'",
+	"--cookie-secret='cookie-secret'",
+	"--client-id='client-id'",
+	"--client-secret='client-secret'",
+}
+
+// todo make this create a deployment + configmap
+func newOauth2Proxy(cr *v1alpha1.Proxy) *v1.Pod {
 	labels := map[string]string{
-		"app": "busy-box",
+		"app": "oauth2-proxy",
 	}
 	return &v1.Pod{
 		TypeMeta: metav1.TypeMeta{
@@ -44,7 +56,7 @@ func newbusyBoxPod(cr *v1alpha1.Proxy) *v1.Pod {
 			APIVersion: "v1",
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      "busy-box",
+			Name:      "oauth2-proxy",
 			Namespace: cr.Namespace,
 			OwnerReferences: []metav1.OwnerReference{
 				*metav1.NewControllerRef(cr, schema.GroupVersionKind{
@@ -58,9 +70,10 @@ func newbusyBoxPod(cr *v1alpha1.Proxy) *v1.Pod {
 		Spec: v1.PodSpec{
 			Containers: []v1.Container{
 				{
-					Name:    "busybox",
-					Image:   "busybox",
-					Command: []string{"sleep", "3600"},
+					Name:    "oauth2-proxy",
+					Image:   "a5huynh/oauth2_proxy:2.2-debian",
+					Command: []string{"/bin/oauth2_proxy"},
+					Args:    args,
 				},
 			},
 		},
