@@ -1,0 +1,13 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: proxys.oauth2proxy.com
+spec:
+  group: oauth2proxy.com
+  names:
+    kind: Proxy
+    listKind: ProxyList
+    plural: proxys
+    singular: proxy
+  scope: Namespaced
+  version: v1alpha1

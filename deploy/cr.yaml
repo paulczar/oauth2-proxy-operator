@@ -1,0 +1,4 @@
+apiVersion: "oauth2proxy.com/v1alpha1"
+kind: "Proxy"
+metadata:
+  name: "example"
