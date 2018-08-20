@@ -22,8 +22,28 @@ type Proxy struct {
 }
 
 type ProxySpec struct {
-	// Fill me
+	Replicas int32       `json:"replicas"`
+	Config   ProxyConfig `json:"config"`
 }
+
+type ProxyConfig struct {
+	// CLI args
+	CookieSecure string `json:"cookieSecure" cli:"--cookie-secure"`
+	Upstream     string `json:"upstream" cli:"--upstream"`
+	HTTPAddress  string `json:"address" cli:"--http-address"`
+	RedirectURL  string `json:"redirectURL" cli:"--redirect-url"`
+	EmailDomain  string `json:"emailDomain" cli:"--email-domain"`
+	Provider     string `json:"provider" cli:"--provider"`
+	// ENV variables
+	CookieSecret string `json:"cookieSecret" env:"OAUTH2_PROXY_COOKIE_SECRET"`
+	CookieDomain string `json:"cookieDomain" env:"OAUTH2_PROXY_COOKIE_DOMIAN"`
+	ClientID     string `json:"clientID" env:"OAUTH2_PROXY_CLIENT_ID"`
+	ClientSecret string `json:"clientSecret" env:"OAUTH2_PROXY_CLIENT_SECRET"`
+	//github specific
+	GithubOrg  string `json:"githubOrg" cli:"--github-org"`
+	GithubTeam string `json:"githubString" cli:"--github-string"`
+}
+
 type ProxyStatus struct {
 	// Fill me
 }

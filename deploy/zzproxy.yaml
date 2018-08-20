@@ -2,3 +2,16 @@ apiVersion: "oauth2proxy.com/v1alpha1"
 kind: "Proxy"
 metadata:
   name: "example"
+spec:
+  name: "example"
+  replicas: 1
+  config:
+    provider: "github"
+    upstream: "http://example:80"
+    emailDomain: "*"
+    address: "0.0.0.0:4180"
+    cookieSecure: "false"
+    cookieSecret: "sdasdsadasdsadsa"
+    cookieDomain: "example.35.224.131.181.xip.io"
+    clientID: "9d0b150c89a639e24eff"
+    clientSecret: "3d8291618f15a1782bc85fe9b6e831a772bf3b77"
