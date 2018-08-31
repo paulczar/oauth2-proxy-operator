@@ -3,8 +3,7 @@ kind: "Proxy"
 metadata:
   name: "example"
 spec:
-  name: "example"
-  replicas: 1
+  size: 1
   config:
     provider: "github"
     upstream: "http://example:80"

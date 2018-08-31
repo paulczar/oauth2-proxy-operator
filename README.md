@@ -1,8 +1,9 @@
 # oauth2 proxy operator
 
-This is a demo operator for the [bitly oauth2 proxy](https://github.com/bitly/oauth2_proxy).
+This is a demo operator for the [bitly oauth2 proxy](https://github.com/bitly/oauth2_proxy). That allows you to easily request a oauth2 proxy that can be used to provide authentication to your applications.
 
-It is not yet fully featured, but has just enough functionality to create oauth2 authentication back to github.
+When request a Proxy resource from Kubernetes using the CRD it will create a Deployment containing a set of Replicas of oauth2proxy configured for your application. It is intended to be a composable resource and thus does not try to guess if you want a nodeport, loadbalancer, or ingress to access it, rather it lets you do that as needed.
+
 
 Once the Operator and CRD is installed you can request an oauth2 proxy with a manifest that looks like:
 
@@ -12,7 +13,6 @@ kind: "Proxy"
 metadata:
   name: "example"
 spec:
-  name: "example"
   replicas: 1
   config:
     provider: "github"

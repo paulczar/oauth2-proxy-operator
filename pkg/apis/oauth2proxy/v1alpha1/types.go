@@ -22,8 +22,9 @@ type Proxy struct {
 }
 
 type ProxySpec struct {
-	Replicas int32       `json:"replicas"`
-	Config   ProxyConfig `json:"config"`
+	Size   int32       `json:"size"`
+	Config ProxyConfig `json:"config"`
+	Image  string      `json:"image"`
 }
 
 type ProxyConfig struct {
